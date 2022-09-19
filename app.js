@@ -74,7 +74,28 @@ const winner = () => {
   }else if (computerScore < playerScore){
     return 'You won the game'
   }else {
-    return 'Tie'
+    return 'It is a draw game. You can play another round with the computer'
   }
 }
+console.log('---------------------------------------------');
 console.log(winner());
+console.log('---------------------------------------------');
+
+
+
+/*const cats= ['lion','tiger','pussy','leopard','jauguar'];
+
+const upperCats = cats.map(elements => {
+  return elements.toUpperCase();
+});
+console.log(upperCats);
+
+const arr = ['apple', 'banana', 'cereal'];
+
+const upper = arr.map(element => {
+  return element.toUpperCase();
+});
+
+// 👇️ ['APPLE', 'BANANA', 'CEREAL']
+console.log(upper);*/
+
