@@ -1,101 +1,132 @@
-const choices = ['rock','paper','scissors'];
-let playerScore = 0;
-let computerScore = 0;
+const tieDisplay =  document.createElement('h2');
+const headingDisplay = document.createElement('h1');
+const userChoiceDisplay = document.createElement('h2');
+const userScoreDisplay = document.createElement('h2');
+const computerChoiceDisplay = document.createElement('h2');
+const computerScoreDisplay = document.createElement('h2');
+const resultDisplay = document.createElement('h2');
+const RoundResultDisplay = document.createElement('h2');
+const gameGrid = document.getElementById('game-grid');
+gameGrid.append(headingDisplay,tieDisplay,userChoiceDisplay,userScoreDisplay,computerChoiceDisplay,computerScoreDisplay,RoundResultDisplay,resultDisplay);
+let user = 0;
+let computer = 0;
+let tie = 0;
+
+headingDisplay.textContent = 'ROCK-PAPER-SCISSORS GAME';
+headingDisplay.style.color = 'yellow';
+
+//array of choices for user to play from.
+const choices = ['Rock','Paper','Scissors']
+let userChoice;
+let computerChoice;
 
 
-const game = () => {
-  for(let i = 1;i <= 5;i++){
-    const computerSelection = getComputerChoice();
-    const playerSelection = prompt('enter rock,paper,scissors: ').toLocaleLowerCase();
-    console.log('computer chose: ' + computerSelection );
-    console.log('you chose chose: ' + playerSelection);
-    console.log(playRound(computerSelection,playerSelection));
-    console.log('computer score is : ' + computerScore)
-    console.log('Your score is : ' + playerScore)
-    console.log('-----------------------------')
-  }
-} 
-
-function getComputerChoice(){
-  return choices[Math.floor(Math.random()*choices.length
-)]
-}
-function playRound(computerSelection,playerSelecion) {
-  if (computerSelection ===  'paper' && playerSelecion === 'paper') {
-    return 'you tie! You both pikced paper'
-  }
-    else if (playerSelecion  ===   'rock' && computerSelection  === 'rock') {
-    return 'you tie! You both pikced rock'
-  }
-    else if (playerSelecion ===  'scissors' && computerSelection === 'scissors') {
-    return 'you tie! You both pikced scissors'
-  }
-    else if (playerSelecion ===  'scissors' && computerSelection === 'rock') {
-    computerScore++
-    return 'Computer won, rock crushes scissors'
-    
-  }
-    else if (playerSelecion ===  'scissors' && computerSelection === 'paper') {
-    playerScore++
-    return 'You won,scissors cuts paper'
-  
-  }
-    else if (playerSelecion ===  'rock' && computerSelection === 'paper') {
-    computerScore++
-    return 'Computer won, paper covers rock'
-    
-
-  
-  }
-    else if (playerSelecion ===  'rock' && computerSelection === 'scissors') {
-    playerScore++
-    return 'You won, rock crushes scissors'
-  
-  }
-    else if (playerSelecion ===  'paper' &&      computerSelection === 'scissors') {
-    computerScore++
-    return 'Computer won, scissors cuts paper'
-    
-  
-  }
-    else if (playerSelecion ===  'paper' && computerSelection === 'rock') {
-    playerScore++
-    return 'You won,paper covers rock'
-  }
-
+const handleClick = (e) => {
+  userChoice = e.target.id;
+  userChoiceDisplay.textContent = 'You chose: ' + userChoice;
+  generateComputerChoice();
+  const winner = getResult(userChoice,computerChoice);
+  showWinner(winner, computerChoice);
+  console.log(user,computer,tie);
+  getFinalResult(user,computer);
 }
 
 
-console.log(game());
+const generateComputerChoice = () => {
+  computerChoice = choices[Math.floor(Math.random()*choices.length)]
+  computerChoiceDisplay.textContent = 'Computer chose: ' + computerChoice;
+  return computerChoice;
+}
 
-const winner = () => {
-  if (computerScore > playerScore){
-    return 'Computer won the game'
-  }else if (computerScore < playerScore){
-    return 'You won the game'
-  }else {
-    return 'It is a draw game. You can play another round with the computer'
+const choicesButton = document.createElement('div');
+choicesButton.id = 'choice-button'
+
+for (let i = 0; i < choices.length; i++) {
+  const button = document.createElement('button');
+  button.id = choices[i];
+  button.textContent = choices[i];
+  button.addEventListener('click',handleClick);
+  choicesButton.appendChild(button)
+}
+
+gameGrid.appendChild(choicesButton);
+
+const resetButton = document.createElement('button');
+resetButton.classList.add('reset');
+resetButton.textContent = 'Play again?';
+gameGrid.appendChild(resetButton);
+
+function getResult() {
+  switch(userChoice + computerChoice) {
+    case 'RockScissors':
+    case 'ScissorsPaper':
+    case 'PaperRock':
+      return 'user';
+      break;
+    case 'ScissorsRock':
+    case 'PaperScissors':
+    case 'RockPaper':
+      return 'computer';
+      break;
+    case 'ScissorsScissors':
+    case 'PaperPaper':
+    case 'RockRock':
+      return 'tie';
+      break;
+    
   }
 }
-console.log('---------------------------------------------');
-console.log(winner());
-console.log('---------------------------------------------');
 
 
+function showWinner(winner, computerChoice) {
+  if (winner === 'user') {
+    // Inc player score
+    user++;
+    RoundResultDisplay.textContent = 'You won'
+    userScoreDisplay.textContent = `Your score is:  ${user}`;
+  } else if (winner === 'computer') {
+    // Inc computer score
+    computer++;
+    computerScoreDisplay.textContent = 'Computer score is:' +  computer;
+    RoundResultDisplay.textContent = 'You lost'
+  } else {
+    tie++
+    tieDisplay.textContent = `Total number of tie is: ${tie}`
+    RoundResultDisplay.textContent = 'Tie';
+  }
 
-/*const cats= ['lion','tiger','pussy','leopard','jauguar'];
+  
+}
 
-const upperCats = cats.map(elements => {
-  return elements.toUpperCase();
-});
-console.log(upperCats);
+function getFinalResult() {
+  
+  if (user == 5) {
+    resultDisplay.textContent = 'Final result: You Won 5 Games, Congrats!';
+    resetButton.style.display = "flex";
+    choicesButton.style.display = 'none';
+  } else if (computer == 5){
+    resultDisplay.textContent = 'Final result: Sorry, the computer won 5 times';
+    resetButton.style.display = "flex";
+    choicesButton.style.display = 'none';
+  }
+  
+  
+  }
 
-const arr = ['apple', 'banana', 'cereal'];
+  function resetGame() {
+    user = 0;
+    computer = 0;
+    tie = 0;
+    userScoreDisplay.textContent = '';
+    computerScoreDisplay.textContent = '';
+    tieDisplay.textContent = '';
+    RoundResultDisplay.textContent = '';
+    resultDisplay.textContent = '';
+    choicesButton.style.display = 'flex';
+    userChoiceDisplay.textContent = '';
+    computerChoiceDisplay.textContent = '';
 
-const upper = arr.map(element => {
-  return element.toUpperCase();
-});
 
-// 👇️ ['APPLE', 'BANANA', 'CEREAL']
-console.log(upper);*/
+  }
 
+  resetButton.addEventListener('click',resetGame);
