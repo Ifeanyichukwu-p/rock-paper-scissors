@@ -125,7 +125,7 @@ function getFinalResult() {
     choicesButton.style.display = 'flex';
     userChoiceDisplay.textContent = '';
     computerChoiceDisplay.textContent = '';
-
+    resetButton.style.display = 'none';
 
   }
 
